@@ -1,17 +1,16 @@
 package br.com.emersonmendes.jms;
 
-import br.com.emersonmendes.dto.Car;
+import java.util.logging.Logger;
 
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
 import javax.jms.Message;
 import javax.jms.MessageListener;
-import java.util.logging.Logger;
 
 @MessageDriven(activationConfig = {
     @ActivationConfigProperty(
         propertyName = "destination",
-        propertyValue = "java:/myJmsTest/MyQueue"
+        propertyValue = "java:/jms/JmsLabQueue"
     )
 })
 public class CarQueueMDB implements MessageListener {

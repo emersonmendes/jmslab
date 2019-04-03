@@ -458,8 +458,8 @@
                 <jms-queue name="DLQ" entries="java:/jms/queue/DLQ"/>
 
                 <!-- config jmslab -->
-                <jms-queue name="MyQueue" entries="java:/myJmsTest/MyQueue"/>
-                <connection-factory name="MyConnectionFactory" entries="java:/myJmsTest/MyConnectionFactory" connectors="in-vm"/>
+                <jms-queue name="JmsLabQueue" entries="java:/jms/JmsLabQueue"/>
+                <connection-factory name="JmsLabConnectionFactory" entries="java:/jms/JmsLabConnectionFactory" connectors="in-vm"/>
                 <!-- config jmslab -->
 
                 <connection-factory name="InVmConnectionFactory" entries="java:/ConnectionFactory" connectors="in-vm"/>

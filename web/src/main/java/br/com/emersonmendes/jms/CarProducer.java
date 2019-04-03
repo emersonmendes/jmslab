@@ -26,10 +26,10 @@ public class CarProducer {
 
     private final static Logger logger = Logger.getLogger(CarProducer.class.toString());
 
-    @Resource(lookup = "java:/myJmsTest/MyConnectionFactory")
+    @Resource(lookup = "java:/jms/JmsLabConnectionFactory")
     ConnectionFactory connectionFactory;
 
-    @Resource(lookup = "java:/myJmsTest/MyQueue")
+    @Resource(lookup = "java:/jms/JmsLabQueue")
     Destination destination;
 
     public void sendMessage(final Car car) {
