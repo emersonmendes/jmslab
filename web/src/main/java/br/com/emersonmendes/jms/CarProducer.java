@@ -6,8 +6,18 @@ import javax.annotation.Resource;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.jms.ConnectionFactory;
+import javax.jms.Destination;
+import javax.jms.JMSConnectionFactory;
 import javax.jms.JMSContext;
+import javax.jms.MessageProducer;
 import javax.jms.Queue;
+import javax.jms.QueueConnection;
+import javax.jms.QueueConnectionFactory;
+import javax.jms.QueueSession;
+import javax.jms.Session;
+import javax.naming.InitialContext;
+
 import java.util.logging.Logger;
 
 @Stateless
@@ -16,15 +26,27 @@ public class CarProducer {
 
     private final static Logger logger = Logger.getLogger(CarProducer.class.toString());
 
-    @Resource(mappedName = "java:/queue/car")
-    Queue testQueue;
+    @Resource(lookup = "java:/myJmsTest/MyConnectionFactory")
+    ConnectionFactory connectionFactory;
 
-    @Inject
-    JMSContext jmsContext;
+    @Resource(lookup = "java:/myJmsTest/MyQueue")
+    Destination destination;
 
     public void sendMessage(final Car car) {
+
         logger.info("Sending message: " + car);
-        jmsContext.createProducer().send(testQueue, car);
+
+        try (
+            QueueConnection connection = (QueueConnection) connectionFactory.createConnection();
+            QueueSession session = connection.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
+            MessageProducer producer = session.createProducer(destination)
+        ){
+            producer.send(session.createObjectMessage(car));
+            logger.info("Message sent! " + car);
+        } catch (Exception ex){
+            ex.printStackTrace();
+        }
+
     }
 
 }

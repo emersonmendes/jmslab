@@ -12,9 +12,10 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./ear/target/jmslab-ear.ear:/opt/jboss/wildfly/standalone/deployments/jmslab-ear.ear
+      - ./configuration/standalone-full.xml:/opt/jboss/wildfly/standalone/configuration/standalone-full.xml
     command: >
       sh -c "
              /opt/jboss/wildfly/bin/add-user.sh admin admin &&
-             /opt/jboss/wildfly/bin/standalone.sh -b 0.0.0.0 -bmanagement 0.0.0.0 -c standalone-full.xml &&
-             jms-queue add --queue-address=carQueue --entries=queue/car,java:jboss/exported/jms/queue/car
+             /opt/jboss/wildfly/bin/add-user.sh myJmsUser myJmsPassword &&
+             /opt/jboss/wildfly/bin/standalone.sh -b 0.0.0.0 -bmanagement 0.0.0.0 -c standalone-full.xml
             "
