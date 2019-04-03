@@ -1,8 +1,9 @@
 package br.com.emersonmendes.dto;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Car {
+public class Car implements Serializable {
 
     public Car(String color, Integer year, String name) {
         this.color = color;

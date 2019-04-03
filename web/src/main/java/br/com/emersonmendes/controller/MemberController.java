@@ -24,6 +24,8 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import br.com.emersonmendes.dto.Car;
+import br.com.emersonmendes.jms.CarProducer;
 import br.com.emersonmendes.model.Member;
 import br.com.emersonmendes.service.MemberRegistration;
 
@@ -36,6 +38,9 @@ public class MemberController {
     @Inject
     private MemberRegistration memberRegistration;
 
+    @Inject
+    private CarProducer carProducer;
+
     private Member newMember;
 
     @Produces
@@ -44,7 +49,10 @@ public class MemberController {
         return newMember;
     }
 
-    public void register() throws Exception {
+    public void register() {
+
+        carProducer.sendMessage(new Car(newMember.getName(), 2019, newMember.getEmail()));
+
         try {
             memberRegistration.register(newMember);
             facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Registered!", "Registration successful"));
@@ -54,6 +62,7 @@ public class MemberController {
             FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, errorMessage, "Registration Unsuccessful");
             facesContext.addMessage(null, m);
         }
+
     }
 
     @PostConstruct
