@@ -1,0 +1,17 @@
+version: '3'
+services:
+
+  webapp:
+    image: jboss/wildfly
+    environment:
+      - TZ=America/Sao_Paulo
+    ports:
+      - 9990:9990
+      - 8080:8080
+      - 8787:8787
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./ear/target/jmslab-ear.ear:/opt/jboss/wildfly/standalone/deployments/jmslab-ear.ear
+    command: >
+      sh -c "/opt/jboss/wildfly/bin/add-user.sh admin admin &&
+             /opt/jboss/wildfly/bin/standalone.sh -b 0.0.0.0 -bmanagement 0.0.0.0 -c standalone-full.xml"
