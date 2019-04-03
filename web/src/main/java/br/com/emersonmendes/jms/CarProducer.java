@@ -5,12 +5,17 @@ import br.com.emersonmendes.dto.Car;
 import javax.annotation.Resource;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.jms.ConnectionFactory;
+import javax.jms.DeliveryMode;
 import javax.jms.Destination;
 import javax.jms.JMSConnectionFactory;
 import javax.jms.JMSContext;
+import javax.jms.Message;
 import javax.jms.MessageProducer;
+import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.jms.QueueConnection;
 import javax.jms.QueueConnectionFactory;
@@ -41,8 +46,17 @@ public class CarProducer {
             QueueSession session = connection.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
             MessageProducer producer = session.createProducer(destination)
         ){
-            producer.send(session.createObjectMessage(car));
+
+
+            ObjectMessage data = session.createObjectMessage();
+            data.setObject(car);
+            producer.setTimeToLive(Message.DEFAULT_TIME_TO_LIVE);
+            producer.setPriority(Message.DEFAULT_PRIORITY);
+            producer.setDeliveryMode(DeliveryMode.PERSISTENT);
+            producer.send(data);
+
             logger.info("Message sent! " + car);
+
         } catch (Exception ex){
             ex.printStackTrace();
         }

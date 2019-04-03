@@ -5,10 +5,10 @@ import java.util.Objects;
 
 public class Car implements Serializable {
 
-    public Car(String color, Integer year, String name) {
-        this.color = color;
-        this.year = year;
+    public Car( String name, Integer year,String color) {
         this.name = name;
+        this.year = year;
+        this.color = color;
     }
 
     public Car() {
