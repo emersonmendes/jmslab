@@ -18,10 +18,7 @@ import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
 @MessageDriven(activationConfig = {
-    @ActivationConfigProperty(
-        propertyName = "destination",
-        propertyValue = "java:/jms/JmsLabQueue"
-    )
+    @ActivationConfigProperty( propertyName = "destination", propertyValue = "java:/jms/JmsLabQueue")
 })
 public class CarQueueMDB implements MessageListener {
 
