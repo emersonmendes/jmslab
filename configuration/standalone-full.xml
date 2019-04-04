@@ -467,16 +467,9 @@
                 <jms-queue name="ExpiryQueue" entries="java:/jms/queue/ExpiryQueue"/>
                 <jms-queue name="DLQ" entries="java:/jms/queue/DLQ"/>
 
-                <!--
-                    config jmslab
 
-
-                    redelivery-multiplier="1.5"
-                    max-redelivery-delay="30000"
-                 -->
-                <address-setting name="jms.JmsLabQueue" redelivery-delay="10000" max-delivery-attempts="-1"/>
-                <address-setting name="jms.queue.JmsLabQueue" redelivery-delay="10000" max-delivery-attempts="-1"/>
-
+                <!-- config jmslab -->
+                <address-setting name="jms.queue.JmsLabQueue" redelivery-delay="7000" max-delivery-attempts="-1"/>
                 <jms-queue name="JmsLabQueue" entries="java:/jms/JmsLabQueue"/>
                 <!-- config jmslab -->
 

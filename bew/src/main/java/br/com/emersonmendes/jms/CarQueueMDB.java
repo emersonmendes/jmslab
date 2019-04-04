@@ -49,8 +49,8 @@ public class CarQueueMDB implements MessageListener {
 
                 logger.warning("########################################################################################: " + x1);
 
-                if(x1 == 7){
-                    logger.warning("Chegou a 7 xxx");
+                if(x1 == 17){
+                    logger.warning("Chegou a 17 xxx");
                     return;
                 }
 
@@ -64,8 +64,8 @@ public class CarQueueMDB implements MessageListener {
 
                 logger.warning("########################################################################################: " + x2);
 
-                if(x2 == 7){
-                    logger.warning("Chegou a 7 yyy");
+                if(x2 == 17){
+                    logger.warning("Chegou a 17 yyy");
                     return;
                 }
 
