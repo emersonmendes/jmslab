@@ -21,10 +21,8 @@ import javax.jms.ObjectMessage;
     @ActivationConfigProperty(
         propertyName = "destination",
         propertyValue = "java:/jms/JmsLabQueue"
-    ),
-    @ActivationConfigProperty(propertyName = "dLQMaxResent", propertyValue = "30")
+    )
 })
-@TransactionManagement(value= TransactionManagementType.CONTAINER)
 public class CarQueueMDB implements MessageListener {
 
     private final static Logger logger = Logger.getLogger(CarQueueMDB.class.toString());
@@ -45,23 +43,40 @@ public class CarQueueMDB implements MessageListener {
             final Car car = (Car) objectMessage.getObject();
             memberService.addCar(car);
 
-
             if(car.getName().equals("xxx")){
+
                 x1++;
+
                 logger.warning("########################################################################################: " + x1);
+
+                if(x1 == 7){
+                    logger.warning("Chegou a 7 xxx");
+                    return;
+                }
+
                 throw new JMSException("xxx");
+
             }
 
-            if(car.getName().equals("kkk")){
+            if(car.getName().equals("yyy")){
+
                 x2++;
+
                 logger.warning("########################################################################################: " + x2);
-                throw new RuntimeException("kkk");
+
+                if(x2 == 7){
+                    logger.warning("Chegou a 7 yyy");
+                    return;
+                }
+
+                throw new RuntimeException("yyy");
+
             }
 
             logger.info(() -> "Received: " + car);
 
         } catch (JMSException ex) {
-            throw new RuntimeException(ex);
+            throw new RuntimeException("CarQueueMDB JMSException :(");
         }
 
     }
