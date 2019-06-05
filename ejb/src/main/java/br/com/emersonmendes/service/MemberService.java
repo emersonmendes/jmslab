@@ -1,24 +1,22 @@
 package br.com.emersonmendes.service;
 
-import br.com.emersonmendes.dto.Car;
+import br.com.emersonmendes.data.MemberRepository;
+import br.com.emersonmendes.model.Member;
 
-import java.util.ArrayList;
+import javax.inject.Inject;
 import java.util.List;
-import java.util.logging.Logger;
 
 public class MemberService {
 
-    private final static Logger logger = Logger.getLogger(MemberService.class.toString());
+    @Inject
+    private MemberRepository memberRepository;
 
-    private static List<Car> myList = new ArrayList<>();
-
-    public List<Car> getMyList() {
-        return myList;
+    public List<Member> getMembers() {
+        return memberRepository.findAll();
     }
 
-    public void addCar(Car car) {
-        logger.info("############## addCar ##############");
-        this.myList.add(car);
+    public void addMember(Member member) {
+
     }
 
 }

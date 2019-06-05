@@ -16,33 +16,23 @@
  */
 package br.com.emersonmendes.controller;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Model;
-import javax.enterprise.inject.Produces;
-import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import javax.inject.Named;
 
-import br.com.emersonmendes.dto.Car;
 import br.com.emersonmendes.model.Member;
-import br.com.emersonmendes.service.MemberRegistration;
 import br.com.emersonmendes.service.MemberService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Model
 public class MemberController {
 
     @Inject
-    private FacesContext facesContext;
-
-    @Inject
     private MemberService memberService;
 
-    public List<Car> getMyList() {
-        return memberService.getMyList();
+    public List<Member> getMembers() {
+        return memberService.getMembers();
     }
 
 }

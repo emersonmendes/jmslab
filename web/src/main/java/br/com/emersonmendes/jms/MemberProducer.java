@@ -1,6 +1,6 @@
 package br.com.emersonmendes.jms;
 
-import br.com.emersonmendes.dto.Car;
+import br.com.emersonmendes.model.Member;
 
 import java.util.logging.Logger;
 
@@ -19,9 +19,9 @@ import javax.jms.Session;
 
 @Stateless
 @LocalBean
-public class CarProducer {
+public class MemberProducer {
 
-    private final static Logger logger = Logger.getLogger(CarProducer.class.toString());
+    private final static Logger logger = Logger.getLogger(MemberProducer.class.toString());
 
     @Resource(mappedName = "java:/JmsXA")
     ConnectionFactory connectionFactory;
@@ -29,9 +29,9 @@ public class CarProducer {
     @Resource(mappedName = "java:/jms/JmsLabQueue")
     Destination destination;
 
-    public void sendMessage(final Car car) {
+    public void sendMessage(final Member member) {
 
-        logger.info("Sending message: " + car);
+        logger.info("Sending message: " + member);
 
         try (
             QueueConnection connection = (QueueConnection) connectionFactory.createConnection();
@@ -40,16 +40,16 @@ public class CarProducer {
         ){
 
             ObjectMessage data = session.createObjectMessage();
-            data.setObject(car);
+            data.setObject(member);
             producer.setTimeToLive(Message.DEFAULT_TIME_TO_LIVE);
             producer.setPriority(Message.DEFAULT_PRIORITY);
             producer.setDeliveryMode(DeliveryMode.PERSISTENT);
             producer.send(data);
 
-            logger.info("Message sent! " + car);
+            logger.info("Message sent! " + member);
 
         } catch (Exception ex){
-            throw new RuntimeException("CarProducer Exception :(");
+            throw new RuntimeException("MemberProducer Exception :(");
         }
 
     }

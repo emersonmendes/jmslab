@@ -1,16 +1,12 @@
 package br.com.emersonmendes.jms;
 
-import br.com.emersonmendes.dto.Car;
+import br.com.emersonmendes.model.Member;
 import br.com.emersonmendes.service.MemberService;
 
 import java.util.logging.Logger;
 
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -20,9 +16,9 @@ import javax.jms.ObjectMessage;
 @MessageDriven(activationConfig = {
     @ActivationConfigProperty( propertyName = "destination", propertyValue = "java:/jms/JmsLabQueue")
 })
-public class CarQueueMDB implements MessageListener {
+public class MemberQueueMDB implements MessageListener {
 
-    private final static Logger logger = Logger.getLogger(CarQueueMDB.class.toString());
+    private final static Logger logger = Logger.getLogger(MemberQueueMDB.class.toString());
 
     private static int x1 = 0;
     private static int x2 = 0;
@@ -37,10 +33,10 @@ public class CarQueueMDB implements MessageListener {
 
             final ObjectMessage objectMessage = (ObjectMessage) msg;
 
-            final Car car = (Car) objectMessage.getObject();
-            memberService.addCar(car);
+            final Member member = (Member) objectMessage.getObject();
+            memberService.addMember(member);
 
-            if(car.getName().equals("xxx")){
+            if(member.getName().equals("xxx")){
 
                 x1++;
 
@@ -55,7 +51,7 @@ public class CarQueueMDB implements MessageListener {
 
             }
 
-            if(car.getName().equals("yyy")){
+            if(member.getName().equals("yyy")){
 
                 x2++;
 
@@ -70,10 +66,10 @@ public class CarQueueMDB implements MessageListener {
 
             }
 
-            logger.info(() -> "Received: " + car);
+            logger.info(() -> "Received: " + member);
 
         } catch (JMSException ex) {
-            throw new RuntimeException("CarQueueMDB JMSException :(");
+            throw new RuntimeException("MemberQueueMDB JMSException :(");
         }
 
     }

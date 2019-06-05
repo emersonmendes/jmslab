@@ -1,0 +1,10 @@
+[
+  {
+    "description": "The mongodb document configuration",
+    "name": "member",
+    "provider": "org.jnosql.diana.mongodb.document.MongoDBDocumentConfiguration",
+    "settings": {
+      "mongodb-server-host-1":"mongo:27017"
+    }
+  }
+]

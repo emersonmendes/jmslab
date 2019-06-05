@@ -16,6 +16,10 @@
  */
 package br.com.emersonmendes.controller;
 
+import br.com.emersonmendes.jms.MemberProducer;
+import br.com.emersonmendes.model.Member;
+import br.com.emersonmendes.service.MemberRegistration;
+
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Model;
 import javax.enterprise.inject.Produces;
@@ -23,11 +27,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-
-import br.com.emersonmendes.dto.Car;
-import br.com.emersonmendes.jms.CarProducer;
-import br.com.emersonmendes.model.Member;
-import br.com.emersonmendes.service.MemberRegistration;
 
 @Model
 public class MemberController {
@@ -39,7 +38,7 @@ public class MemberController {
     private MemberRegistration memberRegistration;
 
     @Inject
-    private CarProducer carProducer;
+    private MemberProducer memberProducer;
 
     private Member newMember;
 
@@ -51,7 +50,7 @@ public class MemberController {
 
     public void register() {
 
-        carProducer.sendMessage(new Car(newMember.getName(), 2019, newMember.getEmail()));
+        memberProducer.sendMessage(newMember);
 
         try {
             memberRegistration.register(newMember);
@@ -88,4 +87,5 @@ public class MemberController {
         // This is the root cause message
         return errorMessage;
     }
+
 }

@@ -17,30 +17,54 @@
 package br.com.emersonmendes.service;
 
 import br.com.emersonmendes.model.Member;
+import org.jnosql.artemis.ConfigurationUnit;
+import org.jnosql.artemis.document.DocumentTemplate;
+import org.jnosql.diana.api.Settings;
+import org.jnosql.diana.api.document.*;
+import org.jnosql.diana.mongodb.document.MongoDBDocumentCollectionManager;
+import org.jnosql.diana.mongodb.document.MongoDBDocumentConfiguration;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
+import javax.enterprise.inject.Produces;
+import javax.enterprise.inject.se.SeContainer;
+import javax.enterprise.inject.se.SeContainerInitializer;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.*;
 import java.util.logging.Logger;
 
 @Stateless
 public class MemberRegistration {
 
-    @Inject
-    private Logger log;
+    public static final String DOCUMENT_COLLECTION = "member";
 
     @Inject
-    private EntityManager em;
+    @ConfigurationUnit(name = DOCUMENT_COLLECTION)
+    private DocumentCollectionManagerFactory<MongoDBDocumentCollectionManager> managerFactory;
+
+    @Inject
+    private DocumentTemplate documentTemplate;
 
     @Inject
     private Event<Member> memberEventSrc;
 
     public void register(Member member) {
-        log.info("Registering " + member.getName());
-        em.persist(member);
+
+        Random random = new Random();
+        member.setId(random.nextLong());
+
+        documentTemplate.insert(member);
+
         memberEventSrc.fire(member);
+
+    }
+
+    @Produces
+    public MongoDBDocumentCollectionManager getEntityManager() {
+        return managerFactory.get("member");
     }
 
 }

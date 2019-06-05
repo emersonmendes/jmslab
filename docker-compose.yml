@@ -19,3 +19,7 @@ services:
              /opt/jboss/wildfly/bin/add-user.sh myJmsUser myJmsPassword &&
              /opt/jboss/wildfly/bin/standalone.sh --debug -b 0.0.0.0 -bmanagement 0.0.0.0 -c standalone-full.xml
             "
+  mongo:
+    image: mongo
+    ports:
+      - 27017:27017
