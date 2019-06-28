@@ -16,7 +16,9 @@
  */
 package br.com.emersonmendes.controller;
 
+import br.com.emersonmendes.api.IRemoteMyEJB;
 import br.com.emersonmendes.jms.MemberProducer;
+import br.com.emersonmendes.lookup.LookerUp;
 import br.com.emersonmendes.model.Member;
 import br.com.emersonmendes.service.MemberRegistration;
 
@@ -27,6 +29,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.naming.NamingException;
 
 @Model
 public class MemberController {
@@ -41,6 +44,9 @@ public class MemberController {
     private MemberProducer memberProducer;
 
     private Member newMember;
+
+    private IRemoteMyEJB quizRemoteProxy;
+
 
     @Produces
     @Named
@@ -57,35 +63,41 @@ public class MemberController {
             facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Registered!", "Registration successful"));
             initNewMember();
         } catch (Exception e) {
-            String errorMessage = getRootErrorMessage(e);
-            FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, errorMessage, "Registration Unsuccessful");
+            FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error :(", "Registration Unsuccessful");
             facesContext.addMessage(null, m);
         }
+
+        testEjbs();
+
+    }
+
+    private void testEjbs() {
+        findREmote();
+    }
+
+    private void findREmote() {
+
+        String earName = "jmslab-ear";
+        String moduleName = "jmslab-web";
+        String beanName = "MyEJBBean";
+        String interfaceQualifiedName = IRemoteMyEJB.class.getName();
+
+        // No password required <= Component deployed in the same container
+        LookerUp lookerup = new LookerUp("localhost", 8080);
+
+        try {
+            quizRemoteProxy = (IRemoteMyEJB) lookerup.findRemoteSessionBean(LookerUp.SessionBeanType.STATEFUL, earName, moduleName, "", beanName, interfaceQualifiedName);
+        } catch (NamingException e) {
+            e.printStackTrace();
+        }
+
+        quizRemoteProxy.showMessage();
 
     }
 
     @PostConstruct
     public void initNewMember() {
         newMember = new Member();
-    }
-
-    private String getRootErrorMessage(Exception e) {
-        // Default to general error message that registration failed.
-        String errorMessage = "Registration failed. See server log for more information";
-        if (e == null) {
-            // This shouldn't happen, but return the default messages
-            return errorMessage;
-        }
-
-        // Start with the exception and recurse to find the root cause
-        Throwable t = e;
-        while (t != null) {
-            // Get the message from the Throwable class instance
-            errorMessage = t.getLocalizedMessage();
-            t = t.getCause();
-        }
-        // This is the root cause message
-        return errorMessage;
     }
 
 }
