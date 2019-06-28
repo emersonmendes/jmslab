@@ -31,6 +31,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.naming.NamingException;
 
+import static br.com.emersonmendes.lookup.LookerUp.SessionBeanType.STATEFUL;
+
 @Model
 public class MemberController {
 
@@ -86,7 +88,7 @@ public class MemberController {
         LookerUp lookerup = new LookerUp("localhost", 8080);
 
         try {
-            quizRemoteProxy = (IRemoteMyEJB) lookerup.findRemoteSessionBean(LookerUp.SessionBeanType.STATEFUL, earName, moduleName, "", beanName, interfaceQualifiedName);
+            quizRemoteProxy = (IRemoteMyEJB) lookerup.findRemoteSessionBean(STATEFUL, earName, moduleName, "", beanName, interfaceQualifiedName);
         } catch (NamingException e) {
             e.printStackTrace();
         }
