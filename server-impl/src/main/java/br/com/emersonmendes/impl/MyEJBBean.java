@@ -6,7 +6,7 @@ import javax.ejb.*;
  
 
  
-@Stateful
+@Stateless
 @Remote(IRemoteMyEJB.class)
 public class MyEJBBean implements IMyEJB {
 
