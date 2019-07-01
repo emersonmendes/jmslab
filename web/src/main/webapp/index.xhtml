@@ -12,7 +12,9 @@
       <h1>Welcome to Web</h1>
 
       <h:form id="reg">
+
          <h2>Member Registration</h2>
+
          <h:panelGrid columns="3" columnClasses="titleCell">
             <h:outputLabel for="name" value="Name:"/>
             <h:inputText id="name" value="#{newMember.name}" />
@@ -33,6 +35,9 @@
                <h:messages styleClass="messages" errorClass="invalid" infoClass="valid" warnClass="warning" globalOnly="true"/>
             </h:panelGrid>
          </p>
+
+
+         <h:commandButton id="showMessage" action="#{memberController.showMessage}" value="Show Message"/>
 
       </h:form>
 

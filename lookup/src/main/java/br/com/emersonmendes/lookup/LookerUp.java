@@ -10,26 +10,41 @@ public class LookerUp {
  
 	private Properties prop = new Properties();
 
-	public LookerUp(String address, int httpPort){
+	public LookerUp(){
+		String address = "localhost";
+		int httpPort = 8080;
 		prop.put(Context.INITIAL_CONTEXT_FACTORY, "org.jboss.naming.remote.client.InitialContextFactory");
 		prop.put(Context.PROVIDER_URL, String.format("http-remoting://%s:%s/", address, httpPort));
 		prop.put("jboss.naming.client.ejb.context", true);
 		prop.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
 	}
 
-	public Object findRemoteSessionBean(SessionBeanType beanType, String earName, String moduleName, String deploymentDistinctName, String beanName, String interfaceFullQualifiedName) throws NamingException{
+	@SuppressWarnings("unchecked")
+	public <S> S getBean(SessionBeanType beanType, String beanName, Class<S> clazz) {
 
+		String earName = "jmslab-ear";
+		String moduleName = "jmslab-web";
+		String deploymentDistinctName = "";
 		String suffix = "";
 
-		if(beanType.equals(SessionBeanType.STATEFUL)){
-			suffix = "?stateful";
+		S object;
+
+		try {
+
+			if(beanType.equals(SessionBeanType.STATEFUL)){
+				suffix = "?stateful";
+			}
+
+			final Context context = new InitialContext(prop);
+			object = (S) context.lookup(String.format("ejb:%s/%s/%s/%s!%s%s", earName, moduleName, deploymentDistinctName, beanName, clazz.getName(), suffix));
+			context.close();
+
+		} catch (Exception e) {
+			throw new RuntimeException("Error :(", e);
 		}
 
-		final Context context = new InitialContext(prop);
-		Object object = context.lookup(String.format("ejb:%s/%s/%s/%s!%s%s", earName, moduleName, deploymentDistinctName, beanName, interfaceFullQualifiedName, suffix));
-		context.close();
-
 		return object;
+
 	}
 
 	public enum SessionBeanType {

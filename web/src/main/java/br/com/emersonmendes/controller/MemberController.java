@@ -29,9 +29,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.naming.NamingException;
 
-import static br.com.emersonmendes.lookup.LookerUp.SessionBeanType.STATEFUL;
 import static br.com.emersonmendes.lookup.LookerUp.SessionBeanType.STATELESS;
 
 @Model
@@ -48,8 +46,13 @@ public class MemberController {
 
     private Member newMember;
 
-    private IRemoteMyEJB quizRemoteProxy;
+    private LookerUp lookerup;
 
+    @PostConstruct
+    private void init() {
+        newMember = new Member();
+        lookerup = new LookerUp();
+    }
 
     @Produces
     @Named
@@ -64,43 +67,17 @@ public class MemberController {
         try {
             memberRegistration.register(newMember);
             facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Registered!", "Registration successful"));
-            initNewMember();
+            init();
         } catch (Exception e) {
-            FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error :(", "Registration Unsuccessful");
-            facesContext.addMessage(null, m);
+            facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error :(", "Registration Unsuccessful"));
         }
 
-        testEjbs();
-
     }
 
-    private void testEjbs() {
-        findREmote();
-    }
-
-    private void findREmote() {
-
-        String earName = "jmslab-ear";
-        String moduleName = "jmslab-web";
-        String beanName = "MyEJBBean";
-        String interfaceQualifiedName = IRemoteMyEJB.class.getName();
-
-        // No password required <= Component deployed in the same container
-        LookerUp lookerup = new LookerUp("localhost", 8080);
-
-        try {
-            quizRemoteProxy = (IRemoteMyEJB) lookerup.findRemoteSessionBean(STATELESS, earName, moduleName, "", beanName, interfaceQualifiedName);
-        } catch (NamingException e) {
-            e.printStackTrace();
-        }
-
-        quizRemoteProxy.showMessage();
-
-    }
-
-    @PostConstruct
-    public void initNewMember() {
-        newMember = new Member();
+    public void showMessage(){
+        IRemoteMyEJB bean = lookerup.getBean(STATELESS, "MyEJBBean", IRemoteMyEJB.class);
+        String message = bean.showMessage();
+        facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Message", message));
     }
 
 }
