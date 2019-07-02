@@ -23,7 +23,19 @@
          <groupId>br.com.emersonmendes</groupId>
          <artifactId>jmslab-ejb</artifactId>
          <type>ejb</type>
-         <scope>provided</scope>
+         <scope>compile</scope>
+      </dependency>
+
+      <dependency>
+         <groupId>br.com.emersonmendes</groupId>
+         <artifactId>jmslab-lookup</artifactId>
+         <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
+         <groupId>br.com.emersonmendes</groupId>
+         <artifactId>jmslab-server-api</artifactId>
+         <version>${project.version}</version>
       </dependency>
 
       <dependency>
@@ -55,18 +67,6 @@
          <artifactId>javaee-api</artifactId>
          <version>8.0</version>
          <scope>provided</scope>
-      </dependency>
-
-      <dependency>
-         <groupId>br.com.emersonmendes</groupId>
-         <artifactId>jmslab-server-impl</artifactId>
-         <version>${project.version}</version>
-      </dependency>
-
-      <dependency>
-         <groupId>br.com.emersonmendes</groupId>
-         <artifactId>jmslab-lookup</artifactId>
-         <version>${project.version}</version>
       </dependency>
 
    </dependencies>

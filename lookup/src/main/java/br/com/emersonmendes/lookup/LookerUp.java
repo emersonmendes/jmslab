@@ -11,20 +11,16 @@ public class LookerUp {
 	private Properties prop = new Properties();
 
 	public LookerUp(){
-		String address = "localhost";
-		int httpPort = 8080;
-		prop.put(Context.INITIAL_CONTEXT_FACTORY, "org.jboss.naming.remote.client.InitialContextFactory");
-		prop.put(Context.PROVIDER_URL, String.format("http-remoting://%s:%s/", address, httpPort));
-		prop.put("jboss.naming.client.ejb.context", true);
 		prop.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
+		prop.put(Context.INITIAL_CONTEXT_FACTORY, "org.jboss.naming.remote.client.InitialContextFactory");
+		prop.put(Context.PROVIDER_URL, "http-remoting://localhost:8080");
+		prop.put("jboss.naming.client.ejb.context", true);
 	}
 
 	@SuppressWarnings("unchecked")
 	public <S> S getBean(SessionBeanType beanType, String beanName, Class<S> clazz) {
 
-		String earName = "jmslab-ear";
-		String moduleName = "jmslab-web";
-		String deploymentDistinctName = "";
+		String moduleName = "jmslab-server-impl";
 		String suffix = "";
 
 		S object;
@@ -36,7 +32,13 @@ public class LookerUp {
 			}
 
 			final Context context = new InitialContext(prop);
-			object = (S) context.lookup(String.format("ejb:%s/%s/%s/%s!%s%s", earName, moduleName, deploymentDistinctName, beanName, clazz.getName(), suffix));
+			String name = String.format("%s/%s!%s%s", moduleName, beanName, clazz.getName(), suffix);
+
+			System.out.println("############################################");
+			System.out.println("JNDI name: " + name);
+			System.out.println("############################################");
+
+			object = (S) context.lookup(name);
 			context.close();
 
 		} catch (Exception e) {

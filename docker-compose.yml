@@ -2,7 +2,8 @@ version: '3'
 services:
 
   webapp:
-    image: jboss/wildfly:16.0.0.Final
+    build: ./wildfly/
+    image: emerson/wildfly:16.0.0.Final
     environment:
       - TZ=America/Sao_Paulo
     ports:
@@ -11,7 +12,8 @@ services:
       - 8787:8787
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ./ear/target/jmslab-ear.ear:/opt/jboss/wildfly/standalone/deployments/jmslab-ear.ear
+      - ./web/target/jmslab-web.war:/opt/jboss/wildfly/standalone/deployments/jmslab-web.war
+      - ./server-impl/target/jmslab-server-impl-uberjar.jar:/opt/jboss/wildfly/standalone/deployments/jmslab-server-impl.jar
       - ./configuration/standalone-full.xml:/opt/jboss/wildfly/standalone/configuration/standalone-full.xml
     command: >
       sh -c "
