@@ -1,11 +1,9 @@
 package br.com.emersonmendes.lookup;
 
-import java.util.Properties;
-import javax.enterprise.inject.spi.SessionBeanType;
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.naming.NamingException;
- 
+import java.util.Properties;
+
 public class LookerUp {
  
 	private Properties prop = new Properties();

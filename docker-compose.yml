@@ -2,8 +2,7 @@ version: '3'
 services:
 
   webapp:
-    build: ./wildfly/
-    image: emerson/wildfly:16.0.0.Final
+    image: jboss/wildfly:16.0.0.Final
     environment:
       - TZ=America/Sao_Paulo
     ports:

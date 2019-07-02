@@ -13,7 +13,6 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>lookup</module>
         <module>server-api</module>
         <module>server-impl</module>
         <module>ejb</module>
